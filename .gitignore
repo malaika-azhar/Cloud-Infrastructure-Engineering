@@ -1,1 +1,11 @@
+# SSH private keys
+*_key
+*_key2
+*.pem
+id_rsa*
+id_ed25519*
 
+# Local files
+*.log
+.DS_Store
+Thumbs.db
