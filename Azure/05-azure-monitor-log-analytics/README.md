@@ -15,7 +15,7 @@ Monitoring a Linux VM with Azure Monitor Agent, Log Analytics, KQL, alerts and a
 
 One Ubuntu VM sends its SSH logs and CPU data to a Log Analytics workspace. Failed logins are found with KQL, a CPU alert and a log alert both fire, and a workbook shows the data. Every result has a screenshot, and every gap is written down.
 
-### [📑 Open the visual index](05-INDEX.md)
+### [📑 Open the visual index](Monitor-INDEX.md)
 
 </div>
 
@@ -597,7 +597,7 @@ Cloud-Infrastructure-Engineering/
 `-- Azure/
     `-- 05-azure-monitor-log-analytics/
         |-- README.md
-        |-- 05-INDEX.md
+        |-- Monitor-INDEX.md
         |-- commands/
         |   |-- commands.md
         |   `-- cleanup.md
