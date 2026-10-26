@@ -13,7 +13,7 @@
 
 **Quick guide to every step and screenshot in this project.**
 
-### [📖 Open the full README](README.md)
+### [📖 Open the full README](README.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
 
 </div>
 
@@ -240,7 +240,7 @@ Exhibit 15.
 
 <div align="center">
 
-[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md)
+[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md)
 
 ☁️ **[Microsoft Azure](https://azure.microsoft.com)** · ⚖️ **[Azure Load Balancer documentation](https://learn.microsoft.com/azure/load-balancer/)**
 
