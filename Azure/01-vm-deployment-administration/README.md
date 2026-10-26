@@ -1,9 +1,8 @@
-
 <div align="center">
 
 # ☁️ Azure Virtual Machine Deployment & Administration
 
-**Project 01 — Cloud Infrastructure Engineering**
+**Project 01 of 6 — Cloud Infrastructure Engineering**
 
 Linux VM Lifecycle on Microsoft Azure
 
@@ -14,9 +13,9 @@ Linux VM Lifecycle on Microsoft Azure
 ![Managed Disks](https://img.shields.io/badge/Managed_Disks-117864?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Lab-Complete-brightgreen?style=for-the-badge)
 
-One Ubuntu virtual machine taken through its full lifecycle on Azure: key-based SSH access, system checks from inside the guest, a 4 GB data disk mounted by UUID, a resize, the stopped and deallocated power states, and boot diagnostics. Each result is backed by a screenshot, and every limit of the lab is written down.
+One Ubuntu virtual machine taken through its full lifecycle on Azure: key-based SSH access, system checks from inside the guest, a 4 GB data disk mounted by UUID, a resize, the stopped and deallocated power states, and boot diagnostics. Each result is backed by a screenshot.
 
-### [📑 Open the visual index](VM-INDEX.md)
+### [📑 Visual Index](VM-INDEX.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
 
 </div>
 
@@ -37,7 +36,7 @@ One Ubuntu virtual machine taken through its full lifecycle on Azure: key-based 
 11. [Boot Diagnostics](#boot-diagnostics)
 12. [Key Findings](#key-findings)
 13. [Challenges & Fixes](#challenges-fixes)
-14. [Scope & Limitations](#scope-limitations)
+14. [Scope & Notes](#scope-limitations)
 15. [What I Learned](#what-i-learned)
 16. [Skills Demonstrated](#skills-demonstrated)
 17. [Cleanup](#cleanup)
@@ -67,7 +66,7 @@ A single Linux server has to be created, reached safely over SSH, given its own 
 - **Operate:** Compare the stopped and deallocated states, then start the VM again and review boot diagnostics.
 
 > [!NOTE]
-> This is a lab on a student subscription, not a production system. Commands marked 📝 were run in Cloud Shell but are not visible in a kept screenshot. Their results are proven by later screenshots, and each one says which.
+> This is a self-learning lab on a student subscription. Commands marked 📝 were run in Cloud Shell but are not visible in a kept screenshot. Their results are proven by later screenshots, and each one says which.
 
 <div align="center">
 
@@ -154,7 +153,7 @@ flowchart LR
     classDef ws fill:#EAECEE,stroke:#707B7C,color:#3B4142,stroke-dasharray: 4 3
     linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
-<p align="center"><em>All eight resources sit in <code>rg-cie-p01-vm</code> (Exhibit 13). The NIC, VNet and subnet names come from Exhibit 8. The diagram shows the layout, it is not a screenshot.</em></p>
+<p align="center"><em>All eight resources sit in <code>rg-cie-p01-vm</code> (Exhibit 13). The NIC, VNet and subnet names come from Exhibits 8 and 13. The diagram shows the layout, it is not a screenshot.</em></p>
 
 ---
 
@@ -194,7 +193,7 @@ az account show --output table
 
 <p align="center">
   <img src="Screenshots/ss-01-subscription-check.png" alt="Exhibit 1 - Subscription check" width="850"><br>
-  <em>Exhibit 1 — The subscription is <code>Azure for Students</code>, state <code>Enabled</code>. Tenant IDs are blurred</em>
+  <em>Exhibit 1 — The subscription is <code>Azure for Students</code>, state <code>Enabled</code>. Cloud Shell also prints a yellow notice that the subscription is not registered to the <code>Microsoft.CloudShell</code> namespace. Tenant IDs are blurred</em>
 </p>
 
 ### Step 2 — Check that the VM size is available ✅
@@ -219,6 +218,8 @@ az group create --name rg-cie-p01-vm --location indiasouthcentral --tags project
 az group show --name rg-cie-p01-vm --output json
 ```
 
+📝 The `create` output is not in a kept screenshot. Exhibit 3 shows the `show` command.
+
 <p align="center">
   <img src="Screenshots/ss-03-resource-group-created.png" alt="Exhibit 3 - Resource group" width="850"><br>
   <em>Exhibit 3 — <code>rg-cie-p01-vm</code> in <code>indiasouthcentral</code>, <code>provisioningState: Succeeded</code>, with the three tags</em>
@@ -232,7 +233,7 @@ The key is created on the laptop, because Cloud Shell sessions are ephemeral and
 
 ```powershell
 ssh-keygen -t rsa -b 4096 -f $HOME\.ssh\cie_p01_key2 -C "cie-p01" -N '""'
-Get-Content $HOME\.ssh\cie_p01_key2.pub
+Get-Content $HOME\.ssh\cie_p01_key2.pub | Set-Clipboard
 ```
 
 <p align="center">
@@ -274,7 +275,7 @@ Get-Content $HOME\.ssh\cie_p01_key2.pub
 
 <p align="center">
   <img src="Screenshots/ss-08-vm-overview-running.png" alt="Exhibit 8 - VM overview" width="850"><br>
-  <em>Exhibit 8 — <code>vm-cie-p01</code> is <code>Running</code> in <code>rg-cie-p01-vm</code>, India South Central, <code>Standard_B2ls_v2</code>, on <code>vnet-indiasouthcentral-3/snet-indiasouthcentral-1</code>, created 23/10/2026 18:24 UTC. The Tags row reads "Add tags", so the VM has no tags yet</em>
+  <em>Exhibit 8 — <code>vm-cie-p01</code> is <code>Running</code> in <code>rg-cie-p01-vm</code>, India South Central, <code>Standard_B2ls_v2</code>, on <code>vnet-indiasouthcentral-3/snet-indiasouthcentral-1</code>, created 23/10/2026 18:24 UTC. The network interface is <code>vm-cie-p01223</code>. The Tags row reads "Add tags", so the VM has no tags yet</em>
 </p>
 
 🎯 **Result:** The wizard created the VM together with a virtual network, subnet, public IP, network interface and NSG in the same resource group.
@@ -343,12 +344,12 @@ sudo journalctl -u ssh --no-pager | grep "Accepted publickey"
 
 <p align="center">
   <img src="Screenshots/ss-12-ssh-accepted-publickey.png" alt="Exhibit 12 - Accepted publickey" width="850"><br>
-  <em>Exhibit 12 — <code>Accepted publickey for azureuser</code> at 18:50:51. The key fingerprint matches the one printed when <code>cie_p01_key2</code> was created. My own address is blurred</em>
+  <em>Exhibit 12 — <code>Accepted publickey for azureuser</code> at 18:50:51. The key fingerprint matches the one printed when <code>cie_p01_key2</code> was created (Exhibit 4). My own address is blurred</em>
 </p>
 
 ### Step 12 — Tag every resource ✅
 
-Tags on the resource group are not inherited by its resources, so the tag set was applied to each one. 📝 The loop is not visible in a kept screenshot; Exhibit 13 shows its result.
+Tags on the resource group are not inherited by its resources, so the tag set was applied to each one. The tag table in Exhibit 13 includes the data disk, so this was run after the disk was attached (Step 13). 📝 The loop is not visible in a kept screenshot; Exhibit 13 shows its result.
 
 **Run in: Cloud Shell**
 
@@ -405,7 +406,7 @@ az vm show -g rg-cie-p01-vm -n vm-cie-p01 \
 
 <p align="center">
   <img src="Screenshots/ss-14-data-disk-attached.png" alt="Exhibit 14 - Data disk attached" width="850"><br>
-  <em>Exhibit 14 — <code>disk-cie-p01-data</code> at LUN 0, type <code>StandardSSD_LRS</code>. The size column came back empty from the CLI, so the size is proven from inside the VM in Exhibit 15</em>
+  <em>Exhibit 14 — <code>disk-cie-p01-data</code> at LUN 0, type <code>StandardSSD_LRS</code>. The size column did not appear in the table, so the size is proven from inside the VM in Exhibit 15</em>
 </p>
 
 ### Step 14 — Find the new disk in Linux ✅
@@ -515,7 +516,7 @@ findmnt /
 
 <p align="center">
   <img src="Screenshots/ss-21-device-name-swap.png" alt="Exhibit 21 - Device names swapped" width="850"><br>
-  <em>Exhibit 21 — The 4G data disk is now <code>sda</code> (<code>sda1</code>, UUID <code>f87cbd7d-…</code>, on <code>/datadisk</code>) and the 30G OS disk is <code>sdb</code> (<code>sdb1</code> on <code>/</code>)</em>
+  <em>Exhibit 21 — The data disk (UUID <code>f87cbd7d-…</code>) is now <code>sda1</code>, mounted on <code>/datadisk</code>. The OS disk (label <code>cloudimg-rootfs</code>) is now <code>sdb1</code>, mounted on <code>/</code></em>
 </p>
 
 ### 🗺️ Why the UUID Matters
@@ -550,12 +551,12 @@ flowchart TB
 
 ```bash
 az vm list-vm-resize-options -g rg-cie-p01-vm -n vm-cie-p01 \
-  --query "[?contains(name, 'Standard_B')].{Name:name, vCPU:numberOfCores}" -o table
+  --query "[?contains(name, 'Standard_B')].{Name:name, vCPU:numberOfCores, MemoryMB:memoryInMb}" -o table
 ```
 
 <p align="center">
   <img src="Screenshots/ss-22-resize-options.png" alt="Exhibit 22 - Resize options" width="850"><br>
-  <em>Exhibit 22 — Many <code>Standard_B</code> sizes are open to this VM, including <code>Standard_B2ls_v2</code> (current), <code>Standard_B2s_v2</code> and <code>Standard_B4ls_v2</code>. The CLI did not return memory values</em>
+  <em>Exhibit 22 — Many <code>Standard_B</code> sizes are open to this VM, including <code>Standard_B2ls_v2</code> (current), <code>Standard_B2s_v2</code> and <code>Standard_B4ls_v2</code>. The memory column came back empty</em>
 </p>
 
 ### Step 22 — Record the "before" state ✅
@@ -661,7 +662,7 @@ az vm list -d -g rg-cie-p01-vm \
 
 <p align="center">
   <img src="Screenshots/ss-27-vm-deallocated.png" alt="Exhibit 27 - VM deallocated" width="850"><br>
-  <em>Exhibit 27 — State <code>VM deallocated</code>. The public IP column still shows the same address as before (blurred)</em>
+  <em>Exhibit 27 — State <code>VM deallocated</code>. The public IP column still shows an address (blurred) that looks the same as in Exhibit 24</em>
 </p>
 
 ### Step 27 — Start the VM again ✅
@@ -676,7 +677,7 @@ az vm list -d -g rg-cie-p01-vm \
 
 <p align="center">
   <img src="Screenshots/ss-28-vm-started.png" alt="Exhibit 28 - VM started" width="850"><br>
-  <em>Exhibit 28 — State <code>VM running</code> again, same size, same public IP</em>
+  <em>Exhibit 28 — State <code>VM running</code> again, same size, public IP column shown (blurred)</em>
 </p>
 
 ### Step 28 — Check the data disk after the restart ✅
@@ -694,7 +695,7 @@ cat /datadisk/test.txt
   <em>Exhibit 29 — <code>up 7 minutes</code>, <code>/datadisk</code> mounted on <code>/dev/sda1</code>, and <code>test.txt</code> still reads <code>cie-p01 data disk test</code>. The <code>cat</code> command was run twice, so the line appears twice</em>
 </p>
 
-🎯 **Result:** The VM went from running to stopped to deallocated and back to running. The public IP address stayed the same, and the data disk and its file survived.
+🎯 **Result:** The VM went from running to stopped to deallocated and back to running. The public IP column showed an address in every state, and the data disk and its file survived.
 
 ---
 
@@ -720,7 +721,7 @@ cat /datadisk/test.txt
 - **Device names are not stable.** After the first reboot the data disk was `sda` and the OS disk was `sdb` (Exhibit 21). After the later resize the data disk was `sdb1` again (Exhibit 25). Both times the mount worked, because `/etc/fstab` uses the UUID.
 - **Internet-facing SSH is probed quickly.** The SSH log in Exhibit 11 shows failed attempts from other addresses (`root` and an invalid user), about 30 minutes after the VM was created. The lines visible there are pre-authentication disconnects and invalid-user rejections. None of them is a successful login.
 - **The resize changed memory, not vCPUs.** Both sizes have 2 vCPUs. The guest reported 3.8Gi before and 7.7Gi after (Exhibits 23 and 25).
-- **The public IP survived deallocation.** The address in the deallocated and restarted states (Exhibits 27 and 28) is the same as before.
+- **An address stayed on the VM through deallocation.** The public IP column showed an address in the deallocated and restarted states (Exhibits 27 and 28), and it looks the same as before. The address is blurred.
 - **Tags are not inherited.** The resource group had tags, and the VM did not (Exhibit 8) until each resource was tagged (Exhibit 13).
 
 ---
@@ -737,7 +738,7 @@ cat /datadisk/test.txt
 | The first `list-skus` query with a long `--query` filter printed nothing and was cancelled (Exhibit 2) | Ran the shorter command in Step 2. I did not find the cause of the empty output |
 | The VM had no tags although its resource group did (Exhibit 8) | Tagged every resource with `az resource tag --is-incremental` (Exhibit 13) |
 | Linux commands typed in laptop PowerShell, and `ssh -i` typed inside the VM, failed with errors | Each command now has a "Run in" label. The key only exists on the laptop, and `az` is run in Cloud Shell |
-| The data disk size column was empty in the CLI output | Confirmed 4G from `lsblk` inside the VM (Exhibit 15) |
+| The data disk size column did not appear in the CLI output | Confirmed 4G from `lsblk` inside the VM (Exhibit 15) |
 
 <p align="center">
   <img src="Screenshots/ss-31-first-key-passphrase-denied.png" alt="Exhibit 31 - First key rejected" width="850"><br>
@@ -747,18 +748,14 @@ cat /datadisk/test.txt
 ---
 
 <a id="scope-limitations"></a>
-## 🚧 Scope & Limitations
+## 🚧 Scope & Notes
 
-- **SSH was open to all addresses.** Port 22 allowed every source address for the whole lab. Restricting it, or removing the public IP, is not part of this project.
-- **No NSG design.** The NSG came from the portal wizard and its rules were not reviewed one by one.
-- **No backup, monitoring or high availability.** The VM is a single instance with no availability zone.
-- **Cost was not measured.** The portal showed "Price unavailable" for the selected size (Exhibit 6), and no billing figures were captured. The stopped and deallocated states were observed through the Azure CLI only. How each state is billed was not tested here.
-- **Some commands are not on screen.** The commands marked 📝 (tagging loop, disk attach, resize, stop, deallocate, start) ran in Cloud Shell. Their results are shown, the commands themselves are not.
-- **The first key pair is documented only through its failure.** It was replaced by the second pair.
+- **SSH was open to all addresses.** Port 22 allowed every source address for the whole lab (Exhibit 7).
+- **Some commands are not on screen.** The commands marked 📝 (group create output, tagging loop, disk attach, resize, stop, deallocate, start, delete) ran in Cloud Shell. Their results are shown, the commands themselves are not.
+- **The first key pair is documented through its failure.** It was replaced by the second pair (Exhibit 31).
 - **Log lines show only part of the picture.** Exhibit 11 shows a few failed login lines. The log was not searched for a full count.
+- **Cleanup has no screenshot.** The resource group was deleted, but the output of the check was not kept (see [Cleanup](#cleanup)).
 - **Single region, one subscription type.** The results come from an Azure for Students subscription in India South Central.
-
-These gaps are marked in the project instead of being hidden, so the results show what was actually proven.
 
 ---
 
@@ -790,14 +787,14 @@ These gaps are marked in the project instead of being hidden, so the results sho
 - Reading boot diagnostics
 - Applying a naming and tagging standard
 - Recovering SSH access after a failed first login
-- Separating proven results from notes and limits in project documentation
+- Separating proven results from notes in project documentation
 
 ---
 
 <a id="cleanup"></a>
 ## 🧹 Cleanup
 
-All resources are in `rg-cie-p01-vm`. The procedure and the verification command are in [`commands/cleanup.md`](commands/cleanup.md).
+The group `rg-cie-p01-vm` was deleted with one command (`az group delete`). No screenshot of the delete or the check was kept, so the result is stated, not shown. Details: [`commands/cleanup.md`](commands/cleanup.md).
 
 ---
 
@@ -826,7 +823,7 @@ All resources are in `rg-cie-p01-vm`. The procedure and the verification command
 | 18 | `ss-18-mount-and-fstab.png` | Mount, fstab entry and `mount -a` test |
 | 19 | `ss-19-disk-write-test.png` | Test file on the data disk |
 | 20 | `ss-20-reboot-persistence.png` | Mount and data after reboot |
-| 21 | `ss-21-device-name-swap.png` | `sda` and `sdb` swapped names |
+| 21 | `ss-21-device-name-swap.png` | Data disk and OS disk swapped names |
 | 22 | `ss-22-resize-options.png` | Allowed resize options |
 | 23 | `ss-23-before-resize.png` | 2 vCPUs, 3.8Gi before resize |
 | 24 | `ss-24-vm-resized.png` | `Standard_B2s_v2`, running |
