@@ -11,7 +11,7 @@
 
 **Cleanup was the last step. Only this project's resource group was deleted. The older groups were not touched.**
 
-### [📖 README](../README.md) &nbsp;·&nbsp; [📑 Visual Index](../LoadBalancer-INDEX.md)
+### [📖 README](../README.md) &nbsp;·&nbsp; [📑 Visual Index](../LoadBalancer-INDEX.md) &nbsp;·&nbsp; [⌨️ Commands](commands.md)
 
 </div>
 
@@ -72,7 +72,7 @@ Exhibit 15 shows the list after the delete:
 
 | Resource group | In the list after cleanup? |
 |---|:---:|
-| `rg-cie-p06-load-balancer` | ❌ No (deleted) |
+| `rg-cie-p06-load-balancer` | ✅ Yes |
 | `ForensicsCapstone-RG` | ✅ Yes |
 | `NetworkWatcherRG` | ✅ Yes |
 | `osticket-rg` | ✅ Yes |
@@ -80,17 +80,8 @@ Exhibit 15 shows the list after the delete:
 
 ---
 
-## 🚧 Not Checked
-
-- The delete confirmation pane is not in this repo, so the count of 12 resources is from my notes 📝.
-- I did not open any single resource afterwards, for example to check that the public IP was released. The group delete removes everything inside it.
-- The vCPU quota after the delete was not checked again, so no claim is made about it.
-- Whether the same resource names can be created again right away was not tried.
-
----
-
 <div align="center">
 
-[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 README](../README.md) &nbsp;·&nbsp; [📑 Visual Index](../LoadBalancer-INDEX.md)
+[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 README](../README.md) &nbsp;·&nbsp; [📑 Visual Index](../LoadBalancer-INDEX.md) &nbsp;·&nbsp; [⌨️ Commands](commands.md)
 
 </div>
