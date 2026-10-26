@@ -3,7 +3,7 @@
 
 # ☁️ Project 01 — Index
 ### Azure Virtual Machine Deployment & Administration
-**Project 01 — Cloud Infrastructure Engineering**
+**Project 01 of 6 — Cloud Infrastructure Engineering**
 
 ![Azure](https://img.shields.io/badge/Azure_VM-Ubuntu_24.04-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
 ![SSH](https://img.shields.io/badge/SSH_Key_Auth-4A3FA6?style=for-the-badge)
@@ -13,7 +13,7 @@
 
 **Quick guide to every step and screenshot in this project.**
 
-### [📖 Open the full README](README.md)
+### [📖 Open the full README](README.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
 
 </div>
 
@@ -61,7 +61,7 @@
 | 24 | VM resized | 🟣 Module 4 | Standard_B2s_v2, running | [Exhibit 24](#ex24) |
 | 25 | After resize | 🟣 Module 4 | 2 vCPUs, 7.7Gi | [Exhibit 25](#ex25) |
 | 26 | VM stopped | 🟣 Module 4 | State: VM stopped | [Exhibit 26](#ex26) |
-| 27 | VM deallocated | 🟣 Module 4 | Public IP unchanged | [Exhibit 27](#ex27) |
+| 27 | VM deallocated | 🟣 Module 4 | Public IP still shown | [Exhibit 27](#ex27) |
 | 28 | VM started | 🟣 Module 4 | Running again | [Exhibit 28](#ex28) |
 | 29 | Disk after restart | 🟣 Module 4 | Mounted, file intact | [Exhibit 29](#ex29) |
 | 30 | Boot diagnostics | 🟣 Module 4 | Login prompt on the console | [Exhibit 30](#ex30) |
@@ -294,7 +294,7 @@ Exhibits 22 to 30.
 <a id="ex27"></a>
 <a href="Screenshots/ss-27-vm-deallocated.png"><img src="Screenshots/ss-27-vm-deallocated.png" width="380" alt="Exhibit 27"></a>
 <br><b>Exhibit 27 — VM deallocated</b>
-<br><sub>Public IP unchanged</sub>
+<br><sub>Public IP still shown</sub>
 </td>
 </tr>
 <tr>
@@ -336,9 +336,7 @@ Exhibits 22 to 30.
 | Resize proven inside the guest | `free -h`: 3.8Gi to 7.7Gi | Module 4 | ✅ Confirmed |
 | Stopped, deallocated and started | `az vm list -d` states | Module 4 | ✅ Confirmed |
 | Boot diagnostics reviewed | Console shows login prompt | Module 4 | ✅ Confirmed |
-| Cost measured | Not part of this lab | Module 4 | ➖ Not measured |
-| SSH restricted to known addresses | Port 22 stayed open to all | Module 1 | ➖ Not done |
-| Resource group deleted | `az group delete` | Cleanup | ⏳ Pending |
+| Resource group deleted | `az group delete` run, result not captured | Cleanup | 📝 Run, no screenshot |
 
 > [!NOTE]
 > The public IP address, subscription ID, tenant ID, account e-mail and machine identifiers are blurred in the screenshots. Times are UTC. Commands marked 📝 in the README ran in Cloud Shell but are not visible in a kept screenshot.
@@ -347,7 +345,7 @@ Exhibits 22 to 30.
 
 <div align="center">
 
-[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md)
+[⬆️ Back to top](#top) &nbsp;·&nbsp; [📖 Full README](README.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
 
 ☁️ **[Microsoft Azure](https://azure.microsoft.com)** · 🐧 **[Ubuntu](https://ubuntu.com)** · 📚 **[Azure CLI documentation](https://learn.microsoft.com/cli/azure/)**
 
