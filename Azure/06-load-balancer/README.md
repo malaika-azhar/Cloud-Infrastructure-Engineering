@@ -16,7 +16,7 @@ Standard Load Balancer, Public IP, Backend Pool, Health Probe, Two Ubuntu Web Se
 
 Two Ubuntu web servers with no public IP sit behind one Standard Load Balancer. Each server shows its own page, so I can see which one answered. I stop one server, check that the same address still works from the other, start it again, and check that it returns. Every result has a screenshot unless it is marked 📝.
 
-### [📑 Open the visual index](LoadBalancer-INDEX.md)
+### [📑 Open the visual index](LoadBalancer-INDEX.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
 
 </div>
 
@@ -671,6 +671,7 @@ Cloud-Infrastructure-Engineering/
         |-- README.md
         |-- LoadBalancer-INDEX.md
         |-- commands/
+        |   |-- commands.md
         |   `-- cleanup.md
         `-- Screenshots/
             |-- ss-01-rg-created.png
@@ -694,7 +695,7 @@ Cloud-Infrastructure-Engineering/
 
 <div align="center">
 
-[⬆️ Back to top](#top) &nbsp;·&nbsp; [📑 Visual Index](LoadBalancer-INDEX.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
+[⬆️ Back to top](#top) &nbsp;·&nbsp; [📑 Visual Index](LoadBalancer-INDEX.md) &nbsp;·&nbsp; [⌨️ Commands](commands/commands.md) &nbsp;·&nbsp; [🧹 Cleanup](commands/cleanup.md)
 
 ☁️ **[Microsoft Azure](https://azure.microsoft.com)** · ⚖️ **[Azure Load Balancer documentation](https://learn.microsoft.com/azure/load-balancer/)**
 
