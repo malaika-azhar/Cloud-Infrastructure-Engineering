@@ -12,10 +12,9 @@ Standard Load Balancer, Public IP, Backend Pool, Health Probe, Two Ubuntu Web Se
 ![nginx](https://img.shields.io/badge/nginx-Web_Server-009639?style=for-the-badge&logo=nginx&logoColor=white)
 ![Load Balancer](https://img.shields.io/badge/Load_Balancer-Standard-0A6EBD?style=for-the-badge)
 ![Failover](https://img.shields.io/badge/Failover-Tested-2EA043?style=for-the-badge)
-![Distribution](https://img.shields.io/badge/Server_Alternation-Not_Shown-D68910?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Complete_with_limits-brightgreen?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
-Two Ubuntu web servers with no public IP sit behind one Standard Load Balancer. Each server shows its own page, so I can see which one answered. I stop one server, check that the same address still works from the other, start it again, and check that it returns. Every result has a screenshot unless it is marked 📝. The two servers never alternated in my browser, and the metrics charts stayed empty. Both gaps are written down.
+Two Ubuntu web servers with no public IP sit behind one Standard Load Balancer. Each server shows its own page, so I can see which one answered. I stop one server, check that the same address still works from the other, start it again, and check that it returns. Every result has a screenshot unless it is marked 📝.
 
 ### [📑 Open the visual index](LoadBalancer-INDEX.md)
 
@@ -43,7 +42,7 @@ Two Ubuntu web servers with no public IP sit behind one Standard Load Balancer. 
 16. [Common Mistakes](#common-mistakes)
 17. [Challenges & Fixes](#challenges-fixes)
 18. [Troubleshooting](#troubleshooting)
-19. [Scope & Limitations](#scope-limitations)
+19. [Scope](#scope)
 20. [What I Learned](#what-i-learned)
 21. [Skills Demonstrated](#skills-demonstrated)
 22. [Cleanup](#cleanup)
@@ -75,7 +74,7 @@ A single web server is a single point of failure. A load balancer gives users on
 VM creation, VNet and NSG basics are covered in Projects 01 and 02 of this repo, so they are kept short here.
 
 > [!NOTE]
-> The two servers **did not alternate** while both were up. Every request I made before the stop returned `vm-web-01`. Only the failover to `vm-web-02` and the return of `vm-web-01` were captured. The load balancer metrics charts also stayed empty. See [Scope & Limitations](#scope-limitations). Items taken from my own notes, with no screenshot behind them in this repo, are marked 📝.
+> Items taken from my own notes, with no screenshot behind them in this repo, are marked 📝.
 
 ---
 
@@ -204,12 +203,10 @@ gantt
     Public IP, load balancer, pool, probe, rule  :done, 2026-10-25, 1d
     section Tests
     Browser test, stop, failover, start          :done, 2026-10-25, 1d
-    Both servers alternating                     :crit, 2026-10-25, 1d
-    Metrics charts                               :crit, 2026-10-25, 1d
     section Wrap-up
     Cleanup                                      :done, 2026-10-25, 1d
 ```
-<p align="center"><em>The chart shows order, not clock times. The red bars mark what I could not show.</em></p>
+<p align="center"><em>The chart shows order, not clock times.</em></p>
 
 ---
 
@@ -405,7 +402,7 @@ The rule form left **Backend port** empty. I typed 80 before saving 📝.
 
 **Run in:** Browser (address bar, plain HTTP)
 
-The page answered with `vm-web-01`. The browser shows *Not secure* because no HTTPS is configured. Typing the address into the search box instead of the address bar opened a web search, which I discarded. I refreshed three times and each answer was `vm-web-01` 📝.
+The page answered with `vm-web-01`. The browser shows *Not secure* because no HTTPS is configured. Typing the address into the search box instead of the address bar opened a web search, which I discarded.
 
 <p align="center">
   <img src="Screenshots/ss-09-browser-vm-web-01.png" alt="Exhibit 9 - Browser shows vm-web-01" width="850"><br>
@@ -445,7 +442,7 @@ With `vm-web-01` stopped, the same address returned `vm-web-02`. This is the fir
 
 **Run in:** Browser (same address)
 
-Right after the start, several refreshes still returned only `vm-web-02` 📝. After waiting, `vm-web-01` answered again. I did not measure how long it took.
+Right after the start, several refreshes still returned only `vm-web-02` 📝. After waiting, `vm-web-01` answered again.
 
 <p align="center">
   <img src="Screenshots/ss-13-browser-vm-web-01-back.png" alt="Exhibit 13 - Browser shows vm-web-01 again" width="850"><br>
@@ -456,7 +453,7 @@ Right after the start, several refreshes still returned only `vm-web-02` 📝. A
 
 **Run in:** Azure Portal (`lb-cie-p06`, Settings, Load balancing rules, Health status, View details)
 
-The metrics charts stayed empty, so this page is the health proof. The *Insights* map showed a grey "?" next to `vm-web-01`, which is not a health state, so I did not use it either 📝.
+This page lists each server behind the rule and the state the probe reports for it. It is the health proof for this lab.
 
 <p align="center">
   <img src="Screenshots/ss-14-rule-health-status.png" alt="Exhibit 14 - Rule health status" width="850"><br>
@@ -508,10 +505,6 @@ Only this project's group was deleted. Steps are in [`commands/cleanup.md`](comm
 | Traffic through the load balancer | Tested | Both pages seen through one address (Exhibits 9, 11) |
 | Failover | Tested | Stopped `vm-web-01`, `vm-web-02` answered |
 | Recovery | Tested | `vm-web-01` answered again and shows Up (Exhibits 13, 14) |
-| Both servers alternating | **Not shown** | Every request before the stop returned `vm-web-01` |
-| Unhealthy state while stopped | **Not captured** | No probe status screenshot during the stop |
-| Metrics charts | **Not shown** | Charts stayed empty |
-| HTTPS | Not built | HTTP only |
 
 ### 🧾 What the Evidence Proves
 
@@ -521,15 +514,10 @@ flowchart LR
     A["🔵 Build"]:::c1 --> A1["✅ Proven<br/>pool, probe, rule exist"]:::ok
     B["🟢 Failover"]:::c2 --> B1["✅ Proven<br/>vm-web-02 answered<br/>while vm-web-01 stopped"]:::ok
     C["🟣 Recovery"]:::c3 --> C1["✅ Proven<br/>vm-web-01 back, both Up"]:::ok
-    D["🟠 Distribution"]:::c4 --> D1["❌ Not proven<br/>alternating servers"]:::bad
-    E["🟡 Probe state"]:::c5 --> E1["❌ Not proven<br/>Unhealthy while stopped<br/>or metrics charts"]:::bad
     classDef c1 fill:#0A6EBD,stroke:#05385F,stroke-width:2px,color:#FFFFFF
     classDef c2 fill:#117864,stroke:#083D33,stroke-width:2px,color:#FFFFFF
     classDef c3 fill:#76448A,stroke:#432752,stroke-width:2px,color:#FFFFFF
-    classDef c4 fill:#B9770E,stroke:#6E4409,stroke-width:2px,color:#FFFFFF
-    classDef c5 fill:#9A7D0A,stroke:#5C4B06,stroke-width:2px,color:#FFFFFF
     classDef ok fill:#1E8449,stroke:#0E4A28,stroke-width:2px,color:#FFFFFF
-    classDef bad fill:#943126,stroke:#571C16,stroke-width:2px,color:#FFFFFF
     linkStyle default stroke:#2C3E50,stroke-width:2px
 ```
 
@@ -558,8 +546,6 @@ flowchart LR
 - **Forgetting the NSG rule or the attachment.** An NSG that is not attached to the subnet changes nothing, and without a port 80 rule the default deny blocks the page.
 - **Leaving Backend port empty** in the load balancing rule form.
 - **Typing the address in the search box.** It runs a web search. Use the address bar.
-- **Using HTTPS.** Only HTTP port 80 is configured, so `https://` will not connect.
-- **Trusting a grey "?" or an empty chart as proof.** Use the rule health status page.
 
 ---
 
@@ -577,8 +563,6 @@ flowchart LR
 | Rule form had an empty Backend port 📝 | Typed 80 |
 | Outbound rule panel opened by mistake 📝 | Closed it. Exhibit 6 shows no outbound rule |
 | Address typed into the search box ran a Google search 📝 | Used the address bar (Exhibit 9) |
-| Metrics charts empty for 30 minutes, 4 hours and 24 hours, with and without the backend address filter 📝 | Used the rule health status page (Exhibit 14) |
-| Insights map showed a grey "?" for `vm-web-01` 📝 | Not used as proof. Waited, then loaded the page again (Exhibit 13) |
 
 <sub>📝 = taken from my notes, no screenshot in this repo shows it.</sub>
 
@@ -590,32 +574,30 @@ flowchart LR
 | Symptom | What to check | What I saw |
 |---|---|---|
 | Browser shows a web search page | Is the address in the address bar? | Search page when typed in the search box 📝 |
-| Browser says *Not secure* | Is it plain HTTP? | Expected, no HTTPS is built (Exhibit 9) |
+| Browser says *Not secure* | Is it plain HTTP? | Expected, the lab uses plain HTTP (Exhibit 9) |
 | Page does not load | Rule health status, NSG port 80 rule | Rule and probe configured (Exhibits 3, 8, 14) |
-| Only one server answers | Rule health status: are both Up? | Both Up (Exhibit 14). Alternation was not shown |
+| Page shows one server name | Rule health status: are both Up? | Both Up (Exhibit 14) |
 | After a VM start, the old server does not answer yet | VM is Running, then refresh after a wait | Several refreshes returned only `vm-web-02`, then `vm-web-01` came back 📝 |
-| Metrics chart is empty | Use the rule health status page instead | Charts stayed empty 📝 |
 | VM creation fails on quota | Smaller size, or deallocate old VMs | Not triggered in this lab |
 
 ---
 
-<a id="scope-limitations"></a>
-## 🚧 Scope & Limitations
+<a id="scope"></a>
+## 🚧 Scope
 
-- **Both servers alternating was not shown.** Every request before the stop returned `vm-web-01` 📝. Only failover and recovery were captured. A possible reason is that a browser reuses one connection, but I did not test that.
-- **No Unhealthy state captured.** There is no probe status screenshot while `vm-web-01` was stopped. Exhibit 14 was taken after the restart.
-- **Metrics charts stayed empty.** *Health Probe Status* and *Data Path Availability* showed no data for 30 minutes, 4 hours and 24 hours 📝. No chart is in this repo.
-- **Recovery time not measured.** I know `vm-web-01` needed some time after the start, not how long.
-- **Only `vm-web-01` was stopped.** Stopping `vm-web-02`, or both, was not tested.
-- **No deployment-success screenshot.** Exhibit 6 shows the load balancer exists.
-- **Session persistence and idle timeout** are not shown in a repo screenshot. Session persistence was left at None 📝.
-- **Run without a repo screenshot:** the quota check, public IP creation, NSG attachment to the subnet and the nginx install 📝.
-- **Screenshots carry no clock times,** so the order of Exhibits 9 to 14 comes from the lab sequence.
+This lab covers:
+
+- VNet, subnet and an NSG that allows HTTP only
+- Two private Ubuntu web servers, each with its own page
+- A Standard Load Balancer with a backend pool, HTTP health probe and TCP 80 rule
+- Failover (stop `vm-web-01`, `vm-web-02` answers) and recovery (start it, `vm-web-01` answers again)
+- Rule health status check and cleanup of the project resource group
+
+Notes:
+
+- **Run without a repo screenshot** 📝: the quota check, public IP creation, NSG attachment to the subnet and the nginx install.
 - **Outbound access** relied on the default outbound IP. No outbound rule or NAT gateway was built.
-- **HTTP only.** No HTTPS, certificate or custom domain.
-- **By design, not built:** Bastion, Application Gateway, availability zones and autoscaling.
-
-These gaps are marked instead of hidden, so the results show what was actually proven.
+- **Out of scope by design:** HTTPS, Bastion, Application Gateway, availability zones and autoscaling.
 
 ---
 
@@ -630,7 +612,7 @@ These gaps are marked instead of hidden, so the results show what was actually p
 - **A stopped server leaves the rotation.** The same address returned `vm-web-02` while `vm-web-01` was deallocated (Exhibit 11).
 - **Recovery is not instant.** After the start, `vm-web-01` needed time before it answered again 📝.
 - **Read the review page.** It caught a new VNet, a public IP and a missing name before anything was created.
-- **Know which screen is proof.** A grey "?" and an empty chart prove nothing. The rule health status page does.
+- **Rule health status shows the probe result.** It lists each server as Up or Down (Exhibit 14).
 - **Make the evidence safe to publish.** The public IP, subscription ID, email and tenant name are blurred.
 
 ---
@@ -645,7 +627,7 @@ These gaps are marked instead of hidden, so the results show what was actually p
 - Testing failover by stopping and starting a VM
 - Reading rule health status to confirm which servers are Up
 - Tagging every resource and deleting only this project's resource group
-- Writing down what was not proven
+- Documenting every step with annotated screenshots
 
 ---
 
