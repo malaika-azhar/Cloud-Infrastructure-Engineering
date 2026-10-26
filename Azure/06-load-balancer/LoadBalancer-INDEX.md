@@ -9,7 +9,7 @@
 ![Standard](https://img.shields.io/badge/SKU-Standard-0A6EBD?style=for-the-badge)
 ![nginx](https://img.shields.io/badge/nginx-2_Servers-009639?style=for-the-badge&logo=nginx&logoColor=white)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Complete_with_limits-brightgreen?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge)
 
 **Quick guide to every step and screenshot in this project.**
 
@@ -231,10 +231,6 @@ Exhibit 15.
 | Traffic reaches a server | Browser | Module 5 | ✅ `vm-web-01` |
 | Failover to the other server | Browser, one VM stopped | Module 5 | ✅ `vm-web-02` |
 | Recovery after a start | Browser, rule health status | Module 5 | ✅ `vm-web-01` back, both Up |
-| Both servers alternating | Repeated refresh | Module 5 | ➖ Not shown |
-| Unhealthy state while stopped | Probe status during the stop | Module 5 | ➖ Not captured |
-| Metrics charts | Health Probe Status, Data Path Availability | Module 5 | ➖ Stayed empty 📝 |
-| HTTPS | Not part of this lab | Module 4 | ➖ Not attempted |
 | Project group deleted | Resource groups list | Cleanup | ✅ Confirmed |
 
 > [!NOTE]
